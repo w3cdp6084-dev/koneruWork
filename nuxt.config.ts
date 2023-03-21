@@ -1,10 +1,18 @@
 export default defineNuxtConfig({
  srcDir: "src/",
- vite: { 
-   server: {
-       watch: {
-           usePolling: true
-       }
-   },
- }
+ css: ["@/assets/styles/main.scss","@/assets/styles/reset.css"],
+ vite: {
+   css: {
+    preprocessorOptions: {
+      scss: {
+        additionalData: '@import "@/assets/styles/_variables.scss";',
+      },
+    },
+  },
+ },
+ server: {
+   watch: {
+       usePolling: true
+   }
+ },
 })
