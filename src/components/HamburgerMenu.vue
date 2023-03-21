@@ -1,113 +1,182 @@
 <template>
- <div>
-   <button @click="toggleMenu" class="hamburger">
-     <span class="hamburger-box">
-       <span class="hamburger-inner" :class="{ 'is-active': isActive }"></span>
-     </span>
-   </button>
-   <transition name="slide-fade">
-     <nav v-if="isActive" class="menu">
-       <ul>
-         <li><a href="#">Home</a></li>
-         <li><a href="#">About</a></li>
-         <li><a href="#">Contact</a></li>
-       </ul>
-     </nav>
-   </transition>
- </div>
+    <div ref="hambergerMenu" class='hambergerMenu'>
+      <div class='hambergerMenu-overlay-01'></div>
+      <div class='hambergerMenu-overlay-02'></div>
+      <button ref="hambergerMenuBtn" class='hambergerMenu-btn js-click-target :class="{ expanded: expanded }" @click="toggleMenu'>
+         <span class='hambergerMenu-hover'>
+            <span class='hambergerMenu-openarea'>
+               <span class='hambergerMenu-openarea-line hambergerMenu-openarea-line-01'></span>
+               <span class='hambergerMenu-openarea-line hambergerMenu-openarea-line-02'></span>
+            </span>
+         </span>
+      </button>
+    </div>
 </template>
 
 <script>
 export default {
- data() {
-   return {
-     isActive: false,
-   };
- },
- methods: {
+  mounted() {
+    this.$gsap.to(this.$refs.hambergerMenu, {
+      duration: 1, // アニメーションの期間（秒）
+      x: 0, // 開始時のtranslateX値
+      ease: 'power3.out', // アニメーションのイージング
+    });
+  },
+  data() {
+    return {
+      expanded: false,
+    };
+  },
+  methods: {
    toggleMenu() {
-     this.isActive = !this.isActive;
-   },
- },
-};
+    this.expanded = !this.expanded;
+    const animation = this.expanded
+      ? this.$gsap.to(this.$refs.hambergerMenuBtn, {
+          duration: 1,
+          ease: "power2.out",
+          x: "-520px",
+          scale: 0.9,
+          borderRadius: "100px",
+          height: "86px",
+          width: "86px",
+        })
+      : this.$gsap.to(this.$refs.hambergerMenuBtn, {
+          duration: 1,
+          ease: "power2.out",
+          x: "0px",
+          scale: 1,
+          borderRadius: "10px",
+          height: "100%",
+          width: "100%",
+  });
+  animation.play();
+},
+},
+}
 </script>
 
 <style scoped>
-.hamburger {
- position: relative;
- background-color: transparent;
- border: none;
- cursor: pointer;
- padding: 0;
+/* Menu */
+.hambergerMenu{
+  position: fixed;
+  top: 0;
+  right: 10px;
+  bottom: 0;
+  width: 110px;
+  height: calc(100% - 20px);
+  margin: auto 0;
+  transform: translateX(120px);
+  z-index: 11;
+}
+.hambergerMenu-overlay-01, .hambergerMenu-overlay-01:before {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 10px;
+  pointer-events: none;
+}
+.hambergerMenu-overlay-01 {
+  background-color: #dfded9;
+  transform-origin: right;
 }
 
-.hamburger-box {
- width: 40px;
- height: 24px;
- display: inline-block;
- position: relative;
+.hambergerMenu-overlay-01:before {
+  content: "";
+  box-shadow: inset 2px 35px 16px 5px rgba(24,23,13,.2);
+  z-index: 1;
+  opacity: 0;
+  transition: opacity 1s cubic-bezier(.26,.16,.1,1);
 }
 
-.hamburger-inner {
- width: 100%;
- height: 2px;
- background-color: #000;
- position: absolute;
- left: 0;
- top: 50%;
- transition: all 0.3s;
+.hambergerMenu-overlay-01, .hambergerMenu-overlay-01:before {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 10px;
+  pointer-events: none;
+}
+.hambergerMenu-overlay-02, .hambergerMenu-overlay-02:before {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  border-radius: 10px;
+  pointer-events: none;
+}
+.hambergerMenu-overlay-02 {
+  right: 0;
+  width: 510px;
+  background-color: #bcbbb4;
+  transform-origin: right;
+  transform: scaleX(0);
+  overflow: hidden;
+}
+.hambergerMenu-overlay-02, .hambergerMenu-overlay-02:before {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  border-radius: 10px;
+  pointer-events: none;
+}
+.hambergerMenu-btn{
+  right: 0;
+  bottom: 0;
+  margin: auto;
+  border-radius: 10px;
+  cursor: pointer;
+}
+.hambergerMenu-hover {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #fff;
+  transition: transform .25s cubic-bezier(.43,.05,.17,1);
+  border-radius: inherit;
+}
+.hambergerMenu-openarea {
+  position: relative;
+  width: 37px;
+  height: 13px;
+}
+.hambergerMenu-openarea-line-01 {
+  top: 0;
+}
+.hambergerMenu-openarea-line {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background-color: #302c1a;
+  border-radius: 2px;
+  cursor: pointer;
+}
+.hambergerMenu-openarea-line-02{
+  bottom: 0;
+}
+.hambergerMenu-openarea-line{
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background-color: #302c1a;
+  border-radius: 2px;
+  cursor: pointer;
+}
+.hambergerMenu-hover:hover {
+    transform: scale(.9,.98);
+}
+.hambergerMenu.is-open .hambergerMenu-overlay-01:before {
+    opacity: 1;
 }
 
-.hamburger-inner::before,
-.hamburger-inner::after {
- content: "";
- width: 100%;
- height: 2px;
- background-color: #000;
- position: absolute;
- left: 0;
- transition: all 0.3s;
-}
-
-.hamburger-inner::before {
- top: -10px;
-}
-
-.hamburger-inner::after {
- bottom: -10px;
-}
-
-.hamburger-inner.is-active {
- background-color: transparent;
-}
-
-.hamburger-inner.is-active::before {
- top: 0;
- transform: rotate(45deg);
-}
-
-.hamburger-inner.is-active::after {
- top: 0;
- transform: rotate(-45deg);
-}
-
-.menu {
- position: absolute;
- top: 100%;
- left: 0;
- background-color: #fff;
- padding: 10px;
- box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-.slide-fade-enter-active,
-.slide-fade-leave-active {
- transition: all 0.3s;
-}
-
-.slide-fade-enter,
-.slide-fade-leave-to {
- opacity: 0;
- transform: translateY(-20px);
-}
 </style>

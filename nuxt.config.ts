@@ -1,6 +1,7 @@
 export default defineNuxtConfig({
  srcDir: "src/",
- css: ["@/assets/styles/main.scss","@/assets/styles/reset.css"],
+ css: ["@/assets/styles/main.scss","@/assets/styles/common.scss","@/assets/styles/reset.css"],
+ plugins: ['@/plugins/gsap.js'],
  vite: {
    css: {
     preprocessorOptions: {
